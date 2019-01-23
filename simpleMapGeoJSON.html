@@ -38,10 +38,10 @@ var geojsonFeature={
 	},
 	"geometry":{
 		"type":"Point",
-		"coordinates":[-0.118092,51.509865]
+		"coordinates":[-0.1340,51.5246]
 	}
 };
-// add the feature to the map
+// add the feature to the map (<br> starts a new line while <b> makes the text bold)
 L.geoJSON(geojsonFeature).addTo(mymap).bindPopup("<b>"+geojsonFeature.properties.name+"<br>"+geojsonFeature.properties.popupContent+"<b>");
 </script>
 </body>
