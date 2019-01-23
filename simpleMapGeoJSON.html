@@ -43,6 +43,18 @@ var geojsonFeature={
 };
 // add the feature to the map (<br> starts a new line while <b> makes the text bold)
 L.geoJSON(geojsonFeature).addTo(mymap).bindPopup("<b>"+geojsonFeature.properties.name+"<br>"+geojsonFeature.properties.popupContent+"<b>");
+// create a custom popup
+var popup=L.popup();
+// create an event detector to wait for the user's click (listener) and use the popup previously created to show them the coordinates of the point they cicked on
+// Leaflet API converts screen coordinates to real world coordinates for you
+function onMapClick(e){
+	popup
+		.setLatLng(e.latlng)
+		.setContent("You clicked the map at"+e.latlng.toString())
+		.openOn(mymap);
+}
+// add the click even detector to the map
+mymap.on('click',onMapClick);
 </script>
 </body>
 </html>
