@@ -63,10 +63,16 @@
 	<div id="mapid" style="width: 1200px; height: 500px;"></div>
 
 	<!-- the following html will create a button to load the data -->
-	<button id="loadData" name="loadData" onclick="loadEarthquakeData()">Click here to load the data</button>
+	<button id="loadData" name="loadData" onclick="loadEarthquakeData()">Click here to load the Earthquake data</button>
 
 	<!-- the following will create a button to unload the data -->
 	<button id="removeEarthquakeData" name="removeEarthquakeData" onclick="removeEarthquakeData()">Click here to remove the Earthquake data</button>
+
+	<!-- the following will create a button to add the busstops layer to the map -->
+	<button id="loadBusstops" name="loadBusstops" onclick="loadBusstops()">Click here to load the Bus stops data</button>
+
+	<!-- the following will create a button to remove the busstops layer to the map -->
+	<button id="removeBusstops" name="removeBusstops" onclick="removeBusstops()">Click here to remove the Bus stops data</button>
 
 	<!-- the following script will load the map and set the default view and zoom, as well as loading the basemap tiles -->
 	<script>
