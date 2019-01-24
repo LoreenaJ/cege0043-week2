@@ -14,7 +14,7 @@
 	<!-- the following script will allow the buttons to load and remove the earthquake data -->
 	<script>
 		function loadEarthquakeData(){
-			alert("Loading earthquakes");
+			alert("Loading Earthquake data");
 			getEarthquakes();
 		}
 
@@ -60,13 +60,47 @@
 
 	<!-- the following script will allow the two additional buttons to load and remove the bus stops data -->
 	<script>
-		function loadBusstops(){
-			alert("Bus stops data to be loaded");
+		function loadBusstopData(){
+			alert("Loading Bus stop data");
+			getBusstops();
 		}
 
-		function removeBusstops(){
-			alert("Bus stops data will be removed");
-			mymap.removeLayer();
+		// create a global variable that will hold the XMLHttpRequest()
+		var client;
+
+		// create a global variable that will hold the layer itself
+		var busstoplayer;
+
+		// create the code to get the Earthquakes data using XMLHttpRequest
+		function getBusstops(){
+			client = new XMLHttpRequest();
+			client.open('GET',"https://developer.cege.ucl.ac.uk:31050/cege0043-week2/busstops.geojson");
+			client.onreadystatechange = busstopResponse;
+			client.send();
+		}
+
+		// create the code to wait for the response from the data server (listener, state 4) and process the response once it is received
+		function busstopResponse(){
+			if (client.readyState == 4){
+				var busstopdata=client.responseText;
+				loadBusstoplayer(busstopdata);
+			}
+		}
+
+		// convert received data from text to JSON format
+		function loadBusstoplayer(busstopdata){
+			var busstopjson = JSON.parse(busstopdata);
+
+			// add the layer to the map using default icons
+			busstoplayer = L.geoJson(busstopjson).addTo(mymap);
+
+			// change the map zoom so all data shows
+			mymap.fitBounds(busstoplayer.getBounds());
+		}
+
+		function removeBusstopData(){
+			alert("Bus stop data will be removed");
+			mymap.removeLayer(busstoplayer);
 		}
 	</script>
 </head>
@@ -81,10 +115,10 @@
 	<button id="removeEarthquakeData" name="removeEarthquakeData" onclick="removeEarthquakeData()">Click here to remove the Earthquake data</button>
 
 	<!-- the following will create a button to add the busstops layer to the map -->
-	<button id="loadBusstops" name="loadBusstops" onclick="loadBusstops()">Click here to load the Bus stops data</button>
+	<button id="loadBusstopData" name="loadBusstopData" onclick="loadBusstopData()">Click here to load the Bus stops data</button>
 
 	<!-- the following will create a button to remove the busstops layer to the map -->
-	<button id="removeBusstops" name="removeBusstops" onclick="removeBusstops()">Click here to remove the Bus stops data</button>
+	<button id="removeBusstopData" name="removeBusstopData" onclick="removeBusstopData()">Click here to remove the Bus stops data</button>
 
 	<!-- the following script will load the map and set the default view and zoom, as well as loading the basemap tiles -->
 	<script>
