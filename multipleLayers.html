@@ -11,7 +11,7 @@
 	#mapid { height: 180px; }
 	</style>
 
-	<!-- the following script will allow the button to load the earthquake data -->
+	<!-- the following script will allow the buttons to load and remove the earthquake data -->
 	<script>
 		function loadEarthquakeData(){
 			alert("Loading earthquakes");
@@ -50,13 +50,12 @@
 			// change the map zoom so all data shows
 			mymap.fitBounds(earthquakelayer.getBounds());
 		}
-	</script>
 
-	<!-- the following script will allow the second button to remove the data from the map -->
-	<script>
+		// create a function to allow the second button to remove the data from the map -->
 		function removeEarthquakeData(){
-			alert("remove the earthquake data here");
-		}
+			alert("Earthquake data will be removed");
+			mymap.removeLayer(earthquakelayer);
+		}		
 	</script>
 </head>
 <body>
