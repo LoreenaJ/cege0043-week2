@@ -57,6 +57,18 @@
 			mymap.removeLayer(earthquakelayer);
 		}		
 	</script>
+
+	<!-- the following script will allow the two additional buttons to load and remove the bus stops data -->
+	<script>
+		function loadBusstops(){
+			alert("Bus stops data to be loaded");
+		}
+
+		function removeBusstops(){
+			alert("Bus stops data will be removed");
+			mymap.removeLayer();
+		}
+	</script>
 </head>
 <body>
 	<!-- the mapid div will hold the map -->
