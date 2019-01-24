@@ -22,17 +22,16 @@
 		// create the code to get the Earthquakes data using XMLHttpRequest
 		function getEarthquakes(){
 			client = new XMLHttpRequest();
-
 			client.open('GET','https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson');
-			client.onreadystatechange=earthquakeResponse;
+			client.onreadystatechange = earthquakeResponse;
 			client.send();
 		}
 
 		// create the code to wait for the response from the data server (listener, state 4) and process the response once it is received
-		function earthquakeReponse(){
+		function earthquakeResponse(){
 			if (client.readyState == 4){
 				var earthquakedata=client.responseText;
-				loadEarthquakeayer(earthquakedata);
+				loadEarthquakelayer(earthquakedata);
 			}
 		}
 
@@ -41,10 +40,10 @@
 
 		// convert received data from text to JSON format
 		function loadEarthquakelayer(earthquakedata){
-			var earthquakejson=JSON.parse(earthquakedata);
+			var earthquakejson = JSON.parse(earthquakedata);
 
 			// add the layer to the map using default icons
-			earthquakelayer=L.geoJSON(earthquakejson).addTo(mymap);
+			earthquakelayer = L.geoJson(earthquakejson).addTo(mymap);
 
 			// change the map zoom so all data shows
 			mymap.fitBounds(earthquakelayer.getBounds());
