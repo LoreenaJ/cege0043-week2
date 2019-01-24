@@ -56,8 +56,11 @@
 	<!-- the mapid div will hold the map -->
 	<div id="mapid" style="width: 1200px; height: 500px;"></div>
 
-	<!-- the following html will create a button -->
+	<!-- the following html will create a button to load the data -->
 	<button id="loadData" name="loadData" onclick="loadEarthquakeData()">Click here to load the data</button>
+
+	<!-- the following will create a button to unload the data -->
+	<button id="removeEarthquakeData" name="removeEarthquakeData" onclick="removeEarthquakeData()">Click here to remove the Earthquake data</button>
 
 	<!-- the following script will load the map and set the default view and zoom, as well as loading the basemap tiles -->
 	<script>
