@@ -15,12 +15,12 @@
 	<script>
 		function loadEarthquakeData(){
 			alert("Loading Earthquake data");
-			getEarthquakes();
+			getData("earthquakes");
 		}
 
 		function loadBusstopData(){
 			alert("Loading Bus stop data");
-			getBusstops();
+			getData("busstops");
 		}
 
 		// create a global variable that will hold the XMLHttpRequest()
@@ -32,65 +32,59 @@
 		// create a global variable that will hold the layer itself
 		var busstoplayer;
 
-		// create the code to get the Earthquakes data using XMLHttpRequest
-		function getEarthquakes(){
+		// create the code to get the Earthquake and Bus stop data using XMLHttpRequest
+		function getData(layername){
 			client = new XMLHttpRequest();
-			client.open('GET','https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson');
-			client.onreadystatechange = earthquakeResponse;
+
+			// outcome depends on the layername used
+			var url;
+			if (layername == "earthquakes"){
+				url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson'
+			}
+			if (layername == "busstops"){
+				url = 'https://developer.cege.ucl.ac.uk:31050/cege0043-week2/busstops.geojson'
+			}
+
+			client.open('GET',url);
+			client.onreadystatechange = dataResponse;
 			client.send();
 		}
 
 		// create the code to wait for the response from the data server (listener, state 4) and process the response once it is received
-		function earthquakeResponse(){
+		function dataResponse(){
 			if (client.readyState == 4){
-				var earthquakedata=client.responseText;
-				loadEarthquakelayer(earthquakedata);
+				var geoJSONdata=client.responseText;
+				loadlayer(geoJSONdata);
 			}
 		}
 
 		// convert received data from text to JSON format
-		function loadEarthquakelayer(earthquakedata){
-			var earthquakejson = JSON.parse(earthquakedata);
+		function loadlayer(geoJSONdata){
+			// outcome depends on layername used
+			if (geoJSONdata.indexOf("earthquake")>0){
+				var loadingEarthquakes = true;
+			}
+			if (geoJSONdata.indexOf("IIT_METHOD")>0){
+				var loadingBusstops = true;
+			}
+
+			var json = JSON.parse(geoJSONdata);
 
 			// add the layer to the map using default icons
-			earthquakelayer = L.geoJson(earthquakejson).addTo(mymap);
+			if (loadingEarthquakes === true){
+				earthquakelayer = L.geoJson(json).addTo(mymap);
+				mymap.fitBounds(earthquakelayer.getBounds());
+			}
+			if (loadingBusstops === true){
+				busstoplayer = L.geoJson(json).addTo(mymap);
+				mymap.fitBounds(busstoplayer.getBounds());
+			}
 
-			// change the map zoom so all data shows
-			mymap.fitBounds(earthquakelayer.getBounds());
-		}
-
-		// create a function to allow the second button to remove the data from the map -->
+		// create a function to allow the last two buttons to remove the data from the map -->
 		function removeEarthquakeData(){
 			alert("Earthquake data will be removed");
 			mymap.removeLayer(earthquakelayer);
 		}		
-
-		// create the code to get the Earthquakes data using XMLHttpRequest
-		function getBusstops(){
-			client = new XMLHttpRequest();
-			client.open('GET',"https://developer.cege.ucl.ac.uk:31050/cege0043-week2/busstops.geojson");
-			client.onreadystatechange = busstopResponse;
-			client.send();
-		}
-
-		// create the code to wait for the response from the data server (listener, state 4) and process the response once it is received
-		function busstopResponse(){
-			if (client.readyState == 4){
-				var busstopdata=client.responseText;
-				loadBusstoplayer(busstopdata);
-			}
-		}
-
-		// convert received data from text to JSON format
-		function loadBusstoplayer(busstopdata){
-			var busstopjson = JSON.parse(busstopdata);
-
-			// add the layer to the map using default icons
-			busstoplayer = L.geoJson(busstopjson).addTo(mymap);
-
-			// change the map zoom so all data shows
-			mymap.fitBounds(busstoplayer.getBounds());
-		}
 
 		function removeBusstopData(){
 			alert("Bus stop data will be removed");
@@ -103,16 +97,16 @@
 	<div id="mapid" style="width: 1200px; height: 500px;"></div>
 
 	<!-- the following html will create a button to load the data -->
-	<button id="loadData" name="loadData" onclick="loadEarthquakeData()">Click here to load the Earthquake data</button>
+	<button id="loadEarthquakeData" name="loadEarthquakeData" onclick="loadEarthquakeData()">Click here to load the Earthquake data</button>
 
 	<!-- the following will create a button to unload the data -->
 	<button id="removeEarthquakeData" name="removeEarthquakeData" onclick="removeEarthquakeData()">Click here to remove the Earthquake data</button>
 
 	<!-- the following will create a button to add the busstops layer to the map -->
-	<button id="loadBusstopData" name="loadBusstopData" onclick="loadBusstopData()">Click here to load the Bus stops data</button>
+	<button id="loadBusstopData" name="loadBusstopData" onclick="loadBusstopData()">Click here to load the Bus stop data</button>
 
 	<!-- the following will create a button to remove the busstops layer to the map -->
-	<button id="removeBusstopData" name="removeBusstopData" onclick="removeBusstopData()">Click here to remove the Bus stops data</button>
+	<button id="removeBusstopData" name="removeBusstopData" onclick="removeBusstopData()">Click here to remove the Bus stop data</button>
 
 	<!-- the following script will load the map and set the default view and zoom, as well as loading the basemap tiles -->
 	<script>
