@@ -11,10 +11,44 @@
 	#mapid { height: 180px; }
 	</style>
 
-	<!-- the following script will allow the button to load the data -->
+	<!-- the following script will allow the button to load the earthquake data -->
 	<script>
 		function loadEarthquakeData(){
-			alert("load the data here");
+			alert("Loading earthquakes");
+			getEarthquakes();
+		}
+
+		// create a global variable that will hold the XMLHttpRequest()
+		var client;
+
+		// create a global variable that will hold the layer itself
+		var earthquakelayer;
+
+		// create the code to get the Earthquakes data using XMLHttpRequest
+		function getEarthquakes(){
+			client = new XMLHttpRequest();
+			client.open('GET','https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson');
+			client.onreadystatechange = earthquakeResponse;
+			client.send();
+		}
+
+		// create the code to wait for the response from the data server (listener, state 4) and process the response once it is received
+		function earthquakeResponse(){
+			if (client.readyState == 4){
+				var earthquakedata=client.responseText;
+				loadEarthquakelayer(earthquakedata);
+			}
+		}
+
+		// convert received data from text to JSON format
+		function loadEarthquakelayer(earthquakedata){
+			var earthquakejson = JSON.parse(earthquakedata);
+
+			// add the layer to the map using default icons
+			earthquakelayer = L.geoJson(earthquakejson).addTo(mymap);
+
+			// change the map zoom so all data shows
+			mymap.fitBounds(earthquakelayer.getBounds());
 		}
 	</script>
 </head>
